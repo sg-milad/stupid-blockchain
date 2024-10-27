@@ -1,16 +1,50 @@
 package blockchain
 
 import (
+	"bytes"
+	"encoding/gob"
+	"log"
 	"time"
-
-	"github.com/sg-milad/stupid-blockchain/internal/types"
-	"github.com/sg-milad/stupid-blockchain/pkg/pow"
 )
 
+type Block struct {
+	Timestamp     int64
+	Data          []byte
+	PrevBlockHash []byte
+	Hash          []byte
+	Nonce         int
+}
+
+// Serialize serializes the block
+func (b *Block) Serialize() []byte {
+	var result bytes.Buffer
+	encoder := gob.NewEncoder(&result)
+
+	err := encoder.Encode(b)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	return result.Bytes()
+}
+
+// DeserializeBlock deserializes a block
+func DeserializeBlock(d []byte) *Block {
+	var block Block
+
+	decoder := gob.NewDecoder(bytes.NewReader(d))
+	err := decoder.Decode(&block)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	return &block
+}
+
 // NewBlock creates and returns Block
-func NewBlock(data string, prevBlockHash []byte) *types.Block {
-	block := &types.Block{time.Now().Unix(), []byte(data), prevBlockHash, []byte{}, 0}
-	pow := pow.NewProofOfWork(block)
+func NewBlock(data string, prevBlockHash []byte) *Block {
+	block := &Block{time.Now().Unix(), []byte(data), prevBlockHash, []byte{}, 0}
+	pow := NewProofOfWork(block)
 	nonce, hash := pow.Run()
 
 	block.Hash = hash[:]
@@ -20,6 +54,6 @@ func NewBlock(data string, prevBlockHash []byte) *types.Block {
 }
 
 // NewGenesisBlock creates and returns genesis Block
-func NewGenesisBlock() *types.Block {
+func NewGenesisBlock() *Block {
 	return NewBlock("Genesis Block", []byte{})
 }

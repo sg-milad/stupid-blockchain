@@ -5,7 +5,6 @@ import (
 	"strconv"
 
 	"github.com/sg-milad/stupid-blockchain/internal/blockchain"
-	"github.com/sg-milad/stupid-blockchain/pkg/pow"
 )
 
 func main() {
@@ -18,7 +17,7 @@ func main() {
 		fmt.Printf("Prev. hash: %x\n", block.PrevBlockHash)
 		fmt.Printf("Data: %s\n", block.Data)
 		fmt.Printf("Hash: %x\n", block.Hash)
-		pow := pow.NewProofOfWork(block)
+		pow := blockchain.NewProofOfWork(block)
 		fmt.Printf("PoW: %s\n", strconv.FormatBool(pow.Validate()))
 		fmt.Println()
 	}
