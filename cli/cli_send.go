@@ -5,8 +5,6 @@ import (
 	"log"
 
 	"github.com/sg-milad/stupid-blockchain/internal/blockchain"
-	"github.com/sg-milad/stupid-blockchain/internal/network"
-	"github.com/sg-milad/stupid-blockchain/internal/transaction"
 	"github.com/sg-milad/stupid-blockchain/internal/wallet"
 )
 
@@ -28,16 +26,16 @@ func (cli *CLI) send(from, to string, amount int, nodeID string, mineNow bool) {
 	}
 	wallet := wallets.GetWallet(from)
 
-	tx := transaction.NewUTXOTransaction(&wallet, to, amount, &UTXOSet)
+	tx := blockchain.NewUTXOTransaction(&wallet, to, amount, &UTXOSet)
 
 	if mineNow {
-		cbTx := transaction.NewCoinbaseTX(from, "")
-		txs := []*transaction.Transaction{cbTx, tx}
+		cbTx := blockchain.NewCoinbaseTX(from, "")
+		txs := []*blockchain.Transaction{cbTx, tx}
 
 		newBlock := bc.MineBlock(txs)
 		UTXOSet.Update(newBlock)
 	} else {
-		network.SendTx(network.knownNodes[0], tx)
+		blockchain.SendTx(blockchain.KnownNodes[0], tx)
 	}
 
 	fmt.Println("Success!")

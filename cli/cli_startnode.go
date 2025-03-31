@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/sg-milad/stupid-blockchain/internal/network"
+	"github.com/sg-milad/stupid-blockchain/internal/blockchain"
 	"github.com/sg-milad/stupid-blockchain/internal/wallet"
 )
 
@@ -17,5 +17,5 @@ func (cli *CLI) startNode(nodeID, minerAddress string) {
 			log.Panic("Wrong miner address!")
 		}
 	}
-	network.StartServer(nodeID, minerAddress)
+	blockchain.StartServer(nodeID, minerAddress)
 }

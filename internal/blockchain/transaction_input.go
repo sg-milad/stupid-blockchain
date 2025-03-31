@@ -1,6 +1,10 @@
-package transaction
+package blockchain
 
-import "bytes"
+import (
+	"bytes"
+
+	"github.com/sg-milad/stupid-blockchain/internal/wallet"
+)
 
 // TXInput represents a transaction input
 type TXInput struct {
@@ -12,7 +16,7 @@ type TXInput struct {
 
 // UsesKey checks whether the address initiated the transaction
 func (in *TXInput) UsesKey(pubKeyHash []byte) bool {
-	lockingHash := HashPubKey(in.PubKey)
+	lockingHash := wallet.HashPubKey(in.PubKey)
 
 	return bytes.Compare(lockingHash, pubKeyHash) == 0
 }

@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"math"
 	"math/big"
+
+	"github.com/sg-milad/stupid-blockchain/pkg"
 )
 
 var (
@@ -35,9 +37,9 @@ func (pow *ProofOfWork) prepareData(nonce int) []byte {
 		[][]byte{
 			pow.block.PrevBlockHash,
 			pow.block.HashTransactions(),
-			IntToHex(pow.block.Timestamp),
-			IntToHex(int64(targetBits)),
-			IntToHex(int64(nonce)),
+			pkg.IntToHex(pow.block.Timestamp),
+			pkg.IntToHex(int64(targetBits)),
+			pkg.IntToHex(int64(nonce)),
 		},
 		[]byte{},
 	)
